@@ -1,0 +1,23 @@
+{
+  "name": "coderhouse",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/estebanibannez/coderhouse.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/estebanibannez/coderhouse/issues"
+  },
+  "homepage": "https://github.com/estebanibannez/coderhouse#readme",
+  "dependencies": {
+    "tsc": "^1.20150623.0"
+  }
+}
