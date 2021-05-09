@@ -6,9 +6,9 @@ async function operacion(numero1: number, numero2: number, operacion: string) {
 
     return resultado;
   } catch (error) {
-
-    throw error;
     console.log('Ocurrió un error..')
+    throw error;
+    
   }
 }
 
