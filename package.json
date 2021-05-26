@@ -2,9 +2,10 @@
   "name": "coderhouse",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "generico-appnode/index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "nodemon server.js"
   },
   "repository": {
     "type": "git",
@@ -18,6 +19,8 @@
   },
   "homepage": "https://github.com/estebanibannez/coderhouse#readme",
   "dependencies": {
+    "express": "^4.17.1",
+    "nodemon": "^2.0.7",
     "tsc": "^1.20150623.0"
   },
   "devDependencies": {
