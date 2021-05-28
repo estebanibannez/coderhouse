@@ -1,12 +1,19 @@
-import { express, Router } from "express";
+const express = require("express");
+
+const { getItems } = require("./controllers/getItems.controller");
+const { getItemRandom } = require("./controllers/getItemsRandom.controller");
 
 let app = express();
-let port = 3000;
+
+
 
 app.get("/", (req, res) => {
   res.send("Hello World!");
 });
 
-app.listen(port, () => {
-  console.log(`Server on http://localhost:${port}`);
+app.get("/items", getItems);
+app.get("/itemsRandom", getItemRandom);
+
+app.listen(3000, () => {
+  console.log(`Servidor en linea http://localhost:${3000}`);
 });
