@@ -1,6 +1,9 @@
 const fs = require("fs");
 
+userCount = 0;
+
 exports.getItems = async (req, res) => {
+  userCount++;
   try {
     await fs.readFile(
       "desafios/generico-appnode/productos.txt",
@@ -25,4 +28,8 @@ exports.getItems = async (req, res) => {
       status: `Ocurrio un error ${error}`,
     });
   }
+};
+
+exports.contadorItems = (req, res) => {
+  return userCount;
 };

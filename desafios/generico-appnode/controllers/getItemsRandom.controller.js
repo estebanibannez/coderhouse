@@ -1,8 +1,10 @@
 const fs = require("fs");
-const { contadores } = require('./contadores');
+
+userCountRandom = 0;
+
 exports.getItemRandom = async (req, res) => {
-  let contador = new contadores();
-  contador.contadorRandomPath + 1;
+  userCountRandom++;
+
   try {
     await fs.readFile(
       "desafios/generico-appnode/productos.txt",
@@ -35,6 +37,10 @@ exports.getItemRandom = async (req, res) => {
       status: `Ocurrio un error ${error}`,
     });
   }
+};
+
+exports.contadorRandom = (req, res) => {
+  return userCountRandom;
 };
 // devuelve un numero random entre 1 y 3.
 function getRandomArbitrary() {
