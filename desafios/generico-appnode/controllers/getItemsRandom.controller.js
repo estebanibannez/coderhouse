@@ -16,11 +16,10 @@ exports.getItemRandom = async (req, res) => {
             let selected = {};
             let array = JSON.parse(data);
 
-            selected = array.filter((res) => res.id == getRandomArbitrary());
+            selected = array[getRandomInt(0, array.length - 1)]
 
-            //   selected = res.id[getRandomArbitrary()];
-            console.log("Seleccionado", selected);
-            console.log("random", getRandomArbitrary());
+            // console.log("Seleccionado", array[getRandomInt(0, array.length - 1)]);
+            // console.log("random", getRandomInt(0, array.length - 1));
 
             // console.log(JSON.parse(array));
             return res.json({ item: selected });
@@ -45,4 +44,10 @@ exports.contadorRandom = (req, res) => {
 // devuelve un numero random entre 1 y 3.
 function getRandomArbitrary() {
   return parseInt(Math.random() * (4 - 1) + 1);
+}
+
+function getRandomInt(min, max) {
+  min = Math.ceil(min);
+  max = Math.floor(max);
+  return Math.floor(Math.random() * (max - min + 1)) + min;
 }
