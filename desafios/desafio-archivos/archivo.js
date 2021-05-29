@@ -39,41 +39,50 @@
 //   }
 // ]
 
-const fs = require("fs");
+const fs = require("fs").promises;
+
+class Producto {
+  constructor(title, price, thumbnail, id) {
+    this.title = title;
+    this.price = price;
+    this.thumbnail = thumbnail;
+    this.id = id;
+  }
+}
 
 class Archivo {
   constructor(archivo) {
-    this.archivo =  `${archivo}.txt`;
-    // console.log(this.archivo)
+    this.archivo = `${archivo}.txt`;
   }
 
-  arreglo = [];
-  async guardar(producto) {
-    producto.id = this.arreglo.length + 1;
-    this.arreglo.push(producto);
-
-    await fs.promises.writeFile(
-      this.archivo,
-      JSON.stringify(this.arreglo, null, "\t"),
-    );
+  async guardar(title, price, thumbnail) {
+    // parseo en json el documento con productos.
+    let productos = JSON.parse(await this.leer());
+    console.log("Arreglo ->", productos);
+    //creo un producto 
+    let producto = new Producto(title, price, thumbnail, productos.length + 1);
+    //paso al arreglo el producto nuevo a crear.
+    productos.push(producto);
+    //vuelvo a convertir en cadena de texto el array de productos para pasarlo nuevamente al documento.txt.
+    await fs.writeFile(this.archivo, JSON.stringify(productos, null, "\t"));
   }
 
   async leer() {
-    await fs.readFile(this.archivo, "utf-8", (error, array) => {
+    const data = await fs.readFile(this.archivo, "utf-8", (error, array) => {
       if (error) {
         console.log("ocurrió un error");
       } else {
         if (array.length > 0) {
-          console.log(JSON.parse(array));
-          // console.log(JSON.parse(array));
           return array;
-        }else{
-          return []
+        } else {
+          return [];
         }
       }
     });
+    return data;
   }
 
+  
   async borrar() {
     await fs.unlink(this.archivo, (err) => {
       if (err) {
@@ -82,39 +91,17 @@ class Archivo {
         return;
       }
 
-      //file removed
     });
   }
 }
 
-let producto = {
-  title: "Globo Terráqueo",
-  price: 345.67,
-  thumbnail:
-    "https://cdn3.iconfinder.com/data/icons/education-209/64/globe-earth-geograhy-planet-school-256.png",
-  id: 0,
-};
-
-let producto2 = {
-  title: "Calculadora",
-  price: 234.56,
-  thumbnail:
-    "https://cdn3.iconfinder.com/data/icons/education-209/64/calculator-math-tool-school-256.png",
-  id: 0,
-};
-
-let producto3 = {
-  title: "Escuadra",
-  price: 123.45,
-  thumbnail:
-    "https://cdn3.iconfinder.com/data/icons/education-209/64/ruler-triangle-stationary-school-256.png",
-  id: 0,
-};
-
 let archivo = new Archivo("productos");
-archivo.guardar(producto);
-archivo.guardar(producto2);
-archivo.guardar(producto3);
+//guardo un producto desde el mismo metodo guardar.
+archivo.guardar(
+  "Escuadra",
+  345.67,
+  "https://cdn3.iconfinder.com/data/icons/education-209/64/globe-earth-geograhy-planet-school-256.png",
+);
 
 archivo.leer();
 // archivo.borrar("productos.txt");
