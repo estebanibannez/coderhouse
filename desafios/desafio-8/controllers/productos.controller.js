@@ -4,15 +4,14 @@ class Productos {
       title: "Escuadra",
       price: 345.67,
       thumbnail:
-        "https://cdn3.iconfinder.com/data/icons/education-209/64/globe-earth-geograhy-planet-school-256.png",
+        "https://cdn3.iconfinder.com/data/icons/education-209/64/ruler-triangle-stationary-school-256.png",
       id: 1,
     },
     {
-      title: "test 2",
-      price: 345.6,
-      thumbnail:
-        "https://cdn3.iconfinder.com/data/icons/education-209/64/globe-earth-geograhy-planet-school-test.png",
-      id: 2,
+      title: "Calculadora",
+      price: 234.56,
+      thumbnail: "https://cdn3.iconfinder.com/data/icons/education-209/64/calculator-math-tool-school-256.png",
+      id: 2
     },
   ];
 
@@ -40,10 +39,11 @@ class Productos {
 
       console.log("producto agregado ");
 
-      return res.json({
-        mensaje: `Producto agregado con éxito!`,
-        producto: productoAgregado,
-      });
+      res.redirect("/api/productos/formulario");
+      // return res.json({
+      //   mensaje: `Producto agregado con éxito!`,
+      //   producto: productoAgregado,
+      // });
     } catch (err) {
       return res.json({
         error: err.message,
@@ -60,11 +60,16 @@ class Productos {
         res.json({
           mensaje: `El producto con el id: ${req.params.id} no existe.`,
         });
+      } else {
+        res.json({
+          producto,
+        });
       }
+    } catch (error) {
       res.json({
-        producto,
+        error: error,
       });
-    } catch (error) {}
+    }
   };
 
   //obtiene todos los productos
@@ -80,6 +85,22 @@ class Productos {
         error: error,
       });
     }
+  };
+
+  getProductosView = (req, res) => {
+    console.log(this.productos);
+    try {
+      res.render(`tabla`, { hayProductos: true, productos: this.productos });
+    } catch (error) {
+      console.log(`Ocurrió un error ${error}`);
+      res.json({
+        error: error,
+      });
+    }
+  };
+
+  postProductosForm = (req, res) => {
+    res.render("formulario");
   };
 }
 
