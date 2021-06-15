@@ -13,5 +13,4 @@ router.get("/productos/listar/:id", getProductoById);
 router.post("/productos/guardar", postProduct);
 router.get("/productos/vista", getProductosView);
 router.get("/productos/formulario", postProductosForm);
-
 module.exports = router;

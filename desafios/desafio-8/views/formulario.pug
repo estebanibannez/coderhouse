@@ -1,0 +1,19 @@
+.jumbotron
+    h1.display-4 Ingrese un producto PUG
+    p.lead
+        hr
+    hr.my-4
+    form(action='/api/productos/guardar' method='POST')
+        .form-group.row
+            label.col-sm-2.col-form-label Nombre
+            .col-sm-10
+                input#title.form-control(type='text' name='title' aria-describedby='prod' placeholder='Producto')
+        .form-group.row
+            label.col-sm-2.col-form-label Precio
+            .col-sm-10
+                input#price.form-control(type='precio' name='price' placeholder='Precio')
+        .form-group.row
+            label.col-sm-2.col-form-label Foto URL
+            .col-sm-10
+                input#thumbnail.form-control(type='text' name='thumbnail' placeholder='foto')
+        button.btn.btn-primary.btn-lg.btn-block(type='submit') Guardar
