@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HBS con Socket.io</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css"
+        integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous">
+    <link rel="stylesheet" href="style.css">
+
+</head>
+
+<body>
+    <div class="container mt-3">
+        <div class="jumbotron">
+            <h1>Ingrese Producto</h1>
+            <br>
+
+            <form autocomplete="off" novalidate id="formulario" onsubmit="send(event,this)">
+                <!-- Campo nombre del producto -->
+                <div class="form-group">
+                    <label for="nombre">Nombre</label>
+                    <input id="nombre" class="form-control" type="text" name="title" required>
+                </div>
+
+                <!-- Campo precio del producto -->
+                <div class="form-group">
+                    <label for="precio">Precio</label>
+                    <input id="precio" class="form-control" type="number" step="0.5" name="price" required>
+                </div>
+
+                <!-- Campo url de la foto del producto -->
+                <div class="form-group">
+                    <label for="foto">Foto URL</label>
+                    <input id="foto" class="form-control" type="text" name="thumbnail">
+                </div>
+
+                <!-- Botón de envío -->
+                <button type="submit" class="btn btn-success mt-3">Enviar</button>
+            </form>
+            <hr>
+            <button class="btn btn-info mt-3" onclick="location.href = '/api/productos/vista'">Vista handlebars
+                productos</button>
+            <br>
+            <br>
+            <div id="datos"></div>
+
+            <div class="card text-center">
+                <div class="card-header">
+                    CENTRO DE MENSAJES
+                </div>
+                <div class="card-body">
+                    <p class="card-text">
+                        <div id="messages">
+                        </div>
+                    </p>
+                </div>
+                <div class="card-footer text-muted">
+                    <form action="" class="form-inline" onsubmit="return addMessage()">
+                        <div class="form-group mb-2">
+                            <input type="email" class="form-control" id="email" placeholder="Correo electrónico" required >
+                        </div>
+                        <div class="form-group mx-sm-4 mb-2">
+                            <input type="text" class="form-control" id="message" placeholder="Mensaje...">
+                        </div>
+        
+                        <button type="submit" class="btn btn-primary btn-block">Enviar</button>
+                    </form>
+                </div>
+            </div>
+        
+        </div>
+    </div>
+
+
+
+
+
+
+    <script type="text/x-handlebars-template" id="index"></script>
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="./js/socket-client.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/handlebars@latest/dist/handlebars.js"></script>
+
+</body>
+
+</html>

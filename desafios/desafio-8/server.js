@@ -1,11 +1,12 @@
 const express = require("express");
+const app = express();
 const handlebars = require("express-handlebars");
 const PORT = 3000;
-const app = express();
 
-//EXPORTANDO ROUTES
-const ProductosRouter = require("./routers/productos.router");
-const productos = require("./controllers/productos.controller");
+//socket io
+const server = require("http").createServer(app);
+const io = require("socket.io")(server);
+
 //configuraciones middlewares
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
@@ -22,17 +23,50 @@ app.engine(
   }),
 );
 
+//EXPORTANDO ROUTES
+const ProductosRouter = require("./routers/productos.router");
+const productos = require("./controllers/productos.controller");
+const mensajes = require("./controllers/mensajes.controller");
+
 //se establece el motor de plantilla
 app.set("view engine", "hbs");
-app.set("views", "./views");
+app.set("views", __dirname + "/views");
+
+io.on("connection", async (socket) => {
+  console.log("cliente conectado.", socket.id);
+  socket.emit("productos", productos.listar());
+
+  //escuchando mensajes enviados por cliente
+  socket.on("update", (data) => {
+    //se propaga a todos los clientes conectados.
+    io.sockets.emit("productos", productos.listar());
+  });
+
+  //mensajes
+  // socket.emit("messages", mensajes.listMessages());
+
+  // socket.on("new-message", (msg) => {
+  //   mensajes.saveMessage(msg);
+  // });
+});
+
+// middleware para excepciones no atrapadas
+app.use((err, req, res, next) => {
+  console.error(err.message);
+  return res.status(500).send("Algo se rompio!");
+});
 
 //Seteo Rutas Producto
 app.use("/api", ProductosRouter);
 
-
 //se establece ruta que expone archivos html , css, js
-app.use(express.static("public"));
+app.use(express.static(__dirname + "/public"));
 
-app.listen(PORT, () => {
+server.listen(PORT, () => {
   console.log(`servidor [DESAFIO 8] en puerto : http://localhost:${PORT}`);
+});
+
+// en caso de error
+server.on("error", (error) => {
+  console.log("error en el servidor:", error);
 });

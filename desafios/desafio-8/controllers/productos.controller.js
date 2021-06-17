@@ -10,8 +10,9 @@ class Productos {
     {
       title: "Calculadora",
       price: 234.56,
-      thumbnail: "https://cdn3.iconfinder.com/data/icons/education-209/64/calculator-math-tool-school-256.png",
-      id: 2
+      thumbnail:
+        "https://cdn3.iconfinder.com/data/icons/education-209/64/calculator-math-tool-school-256.png",
+      id: 2,
     },
   ];
 
@@ -31,7 +32,6 @@ class Productos {
   //recibe un objeto producto y lo guarda
   postProduct = (req, res) => {
     try {
-      debugger;
       const { title, price, thumbnail } = req.body;
       const id = this.productos.length + 1;
 
@@ -39,16 +39,38 @@ class Productos {
 
       console.log("producto agregado ");
 
-      res.redirect("/api/productos/formulario");
-      // return res.json({
-      //   mensaje: `Producto agregado con éxito!`,
-      //   producto: productoAgregado,
-      // });
+      // res.redirect("/api/productos/formulario");
+      return res.json({
+        mensaje: `Producto agregado con éxito!`,
+        producto: productoAgregado,
+      });
     } catch (err) {
       return res.json({
         error: err.message,
       });
     }
+  };
+  //actualiza un producto
+  updateProduct = (req, res) => {
+    let { id } = req.params;
+    let producto = req.body;
+
+    producto.id = Number(id);
+    let index = this.productos.findIndex((p) => p.id === id);
+    this.productos.splice(index, 1, producto);
+    res.json({
+      mensaje: `El producto con el id: ${id} se actualizó.`,
+    });
+  };
+  //elimina 1 producto
+  deleteProduct = (req, res) => {
+    let { id } = req.params;
+
+    let index = this.productos.findIndex((p) => p.id === id);
+    this.productos.splice(index, 1);
+    res.json({
+      mensaje: `El producto con el id: ${req.params.id} se elimino correctamente.`,
+    });
   };
 
   //obtiene todos los productos por id
@@ -102,6 +124,11 @@ class Productos {
   postProductosForm = (req, res) => {
     res.render("formulario");
   };
+
+  //retorna los productos actuales
+  listar() {
+    return this.productos;
+  }
 }
 
 module.exports = new Productos();
