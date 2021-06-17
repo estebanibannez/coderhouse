@@ -5,6 +5,7 @@
   "main": "desafios/desafio-8/server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node desafios/desafio-8/server.js",
     "dev": "nodemon server.js"
   },
   "repository": {
