@@ -1,22 +1,26 @@
 const socket = io();
+const lblOnline = document.querySelector("#lblOnline");
+const lblOffline = document.querySelector("#lblOffline");
 
 socket.on("connect", () => {
   console.log("cliente conectado ");
 
+  lblOnline.style.display = "";
+  lblOffline.style.display = "none";
   socket.on("productos", function (productos) {
     //console.log(productos);
     document.getElementById("datos").innerHTML = data2TableJS(productos);
   });
-
-  //recibo los mensajes del servidor
-  socket.on("messages", (mensajes) => {
-    debugger
-    renderMessages(mensajes);
-  });
 });
 
-/* obtengo el formulario */
+//recibo los mensajes del servidor
+socket.on("messages", (mensajes) => {
+  renderMessages(mensajes);
+});
+
+/* obtengo las referencias a los formularios */
 const form = document.querySelector("formulario");
+
 
 function send(e, form) {
   debugger;
@@ -47,6 +51,8 @@ function send(e, form) {
 }
 
 socket.on("disconnect", () => {
+  lblOnline.style.display = "none";
+  lblOffline.style.display = "";
   console.log("cliente desconectado");
 });
 
@@ -79,37 +85,53 @@ function data2TableJS(productos) {
   </div>
   {{/if}}
 `;
-  console.log(productos);
   var template = Handlebars.compile(plantilla);
   let html = template({ productos: productos, hayProductos: productos.length });
   return html;
 }
-
 
 //=============================== MENSAJES ============================//
 //funcion que renderiza los mensajes
 function renderMessages(data) {
   let html = data
     .map((elem) => {
-      return `<div></div>
-              <strong style="color:#148DFF"> ${elem.email}</strong>
-              <strong style="color:#591D03">[ ${elem.date} ] </strong>
-              <span class="badge badge-success"> <i>${elem.message}</i></span>
-            
-              </div>`;
+      return `
+            <li class="list-group-item d-flex justify-content-between lh-sm">
+              <div>
+                  <h6 class="my-0" style="color:#148DFF">${elem.email}</h6>
+                  <small style="color:#74BB00"><i>${elem.message}</i></small>
+              </div>
+              <span style="color:#591D03">${elem.date} </span>
+            </li>
+            `;
     })
     .join(" ");
 
   document.querySelector("#messages").innerHTML = html;
 }
-//agrega mensajes
-function addMessage(e) {
-  let message = {
-    email: document.querySelector("#email").value,
-    message: document.querySelector("#message").value,
-  };
 
-  socket.emit("new-message", message);
-  return false;
-}
+//listener que envia los mensajes al server
+
+const btnEnviar = document.querySelector("#btnEnviar");
+const formMessages = document.querySelector("#formMessages");
+
+formMessages.addEventListener("submit", (e) => {
+  debugger;
+  e.preventDefault();
+
+  const email = document.querySelector("#email").value;
+  const msg = document.querySelector("#message").value;
+  let message = {
+    email: email,
+    message: msg,
+    // date: new Date().toLocaleDateString(),
+  };
+  debugger;
+  if (email != "" && msg != "") {
+    socket.emit("new-message", message);
+    //limpio la caja mensaje luego de enviar por socket
+    document.querySelector("#message").value = "";
+  }
+});
+
 //=============================== MENSAJES ============================//

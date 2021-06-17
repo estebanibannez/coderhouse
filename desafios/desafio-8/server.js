@@ -28,12 +28,15 @@ const ProductosRouter = require("./routers/productos.router");
 const productos = require("./controllers/productos.controller");
 const mensajes = require("./controllers/mensajes.controller");
 
+// const Mensaje = require("./models/message");
+// // const mensaje = new Mensaje();
+
 //se establece el motor de plantilla
 app.set("view engine", "hbs");
 app.set("views", __dirname + "/views");
 
-io.on("connection", async (socket) => {
-  console.log("cliente conectado.", socket.id);
+io.on("connection", (socket) => {
+  console.log(`cliente con ID: ${socket.id} CONECTADO AL WEBSOCKET.`);
   socket.emit("productos", productos.listar());
 
   //escuchando mensajes enviados por cliente
@@ -43,11 +46,14 @@ io.on("connection", async (socket) => {
   });
 
   //mensajes
-  // socket.emit("messages", mensajes.listMessages());
+  socket.emit("messages", mensajes.readMessages());
 
-  // socket.on("new-message", (msg) => {
-  //   mensajes.saveMessage(msg);
-  // });
+  socket.on("new-message", (payload) => {
+    console.log("llego al servidor un nuevo msg", payload);
+    mensajes.addMessage(payload);
+
+    socket.emit("messages", mensajes.readMessages());
+  });
 });
 
 // middleware para excepciones no atrapadas
@@ -63,7 +69,7 @@ app.use("/api", ProductosRouter);
 app.use(express.static(__dirname + "/public"));
 
 server.listen(PORT, () => {
-  console.log(`servidor [DESAFIO 8] en puerto : http://localhost:${PORT}`);
+  console.log(`servidor [DESAFIO 8] escuchando en puerto : http://localhost:${PORT}`);
 });
 
 // en caso de error

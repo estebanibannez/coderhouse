@@ -1,56 +1,31 @@
-// const fs = require("fs");
-// const path = require("path");
+const fs = require("fs");
+const path = require("path");
 
-// class Message {
-//   messages = [];
-//   constructor() {
-//     this.messages = [];
-//   }
+var moment = require("moment");
 
-//   checkMessages = async (req, res) => {
-//     //leo el archivo mensajes
-//     let msg = JSON.parse(this.readMessage());
-//     this.messages.push(msg);
-//     console.log(this.messages);
-//     return this.messages;
-//   };
+class Mensajes {
+  constructor() {
+    this.init();
+  }
 
-//   listMessages = (req, res) => {
-//     let msg = JSON.parse(this.readMessage());
-//     console.log(msg);
-//     return this.messages;
-//   };
-//   saveMessage = (req, res) => {
-//     console.log(req.body);
+  addMessage(message) {
+    //agrego fecha hora del mensaje
+    message.date = moment(new Date()).format("DD/MM/YYYY h:mm:ss");
 
-//     // let date = new Date().toLocaleTimeString();
-//     // const { email, message } = req.body;
+    const data = this.readMessages();
+    data.push(message);
+    const dbpath = path.join(__dirname, "../data/mensajes.json");
+    fs.writeFileSync(dbpath, JSON.stringify(data));
+  }
 
-//     // mensajes.push({
-//     //   email: email,
-//     //   message: message,
-//     //   date: date,
-//     // });
-//   };
+  init() {
+    this.readMessages();
+  }
 
-//   readMessage = (req, res) => {
-//     const data = fs.readFile(
-//       path.resolve(__dirname, "../data/mensajes.txt"),
-//       "utf-8",
-//       (error, archivo) => {
-//         if (error) {
-//           console.log(`Ocurrió un error ${error}`);
-//         } else {
-//           if (archivo.length > 0) {
-//             console.log("existe archivo", archivo);
-//             return archivo;
-//           } else {
-//             return [];
-//           }
-//         }
-//       },
-//     );
-//     return data;
-//   };
-// }
-// module.exports = new Message();
+  readMessages() {
+    const data = require("../data/mensajes.json");
+    return data;
+  }
+}
+
+module.exports = new Mensajes();
